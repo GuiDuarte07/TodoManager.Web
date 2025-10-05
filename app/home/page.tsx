@@ -17,7 +17,8 @@ import {
   AddRounded,
   CalendarMonth,
   FilterListRounded,
-  List
+  List,
+  ViewKanban,
 } from "@mui/icons-material";
 import { TodoService } from "@/services/todo.service";
 import { useTodoStore } from "@/store/todo.store";
@@ -30,6 +31,7 @@ import { CreateTodoModal } from "@/components/create-todo-modal";
 import { EditTodoModal } from "@/components/edit-todo-modal";
 import { TodoTableView } from "@/components/todo-table-view";
 import { TodoCalendarView } from "@/components/todo-calendar-view";
+import { TodoKanbanView } from "@/components/todo-kanban-view";
 
 export default function HomePage() {
   const { user } = useAuthStore();
@@ -48,12 +50,12 @@ export default function HomePage() {
   const [error, setError] = useState<string>("");
   const [showFilters, setShowFilters] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [visualization, setVisualization] = useState<"table" | "calendar">(
-    "calendar"
-  );
+  const [visualization, setVisualization] = useState<
+    "table" | "calendar" | "kanban"
+  >("table");
 
-  function changeVisualization() {
-    setVisualization(visualization === "table" ? "calendar" : "table");
+  function changeVisualization(view: "table" | "calendar" | "kanban") {
+    setVisualization(view);
   }
 
   const loadTodos = async () => {
@@ -61,10 +63,11 @@ export default function HomePage() {
     setError("");
 
     try {
+      const pageSize = visualization === 'table' ? 10 : 1000
       const statusFilter = filterStatus === "all" ? undefined : filterStatus;
       const response = await TodoService.getTodos(
         currentPage,
-        10,
+        pageSize,
         statusFilter
       );
       console.log(response.items);
@@ -138,7 +141,7 @@ export default function HomePage() {
             </Box>
           </Box>
 
-          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 2 }}>
             <Chip
               label={`Pendentes: ${getStatusCount(TodoItemStatus.Pending)}`}
               color="default"
@@ -156,15 +159,40 @@ export default function HomePage() {
               color="success"
               variant="outlined"
             />
+          </Box>
+
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+            <Button
+              variant="contained"
+              size="small"
+              disabled={visualization === 'table'}
+              startIcon={<List />}
+              onClick={() => changeVisualization("table")}
+              sx={{ textTransform: "none", fontWeight: 600 }}
+            >
+              Visualização em lista
+            </Button>
 
             <Button
               variant="contained"
               size="small"
-              startIcon={visualization === 'table' ? <CalendarMonth /> : <List />}
-              onClick={() => changeVisualization()}
+              disabled={visualization === 'calendar'}
+              startIcon={<CalendarMonth />}
+              onClick={() => changeVisualization("calendar")}
               sx={{ textTransform: "none", fontWeight: 600 }}
             >
-              {visualization === 'table' ? 'Visualização em calendário' : 'Visualização em lista'}
+              Visualização em calendário
+            </Button>
+
+            <Button
+              variant="contained"
+              size="small"
+              disabled={visualization === 'kanban'}
+              startIcon={<ViewKanban />}
+              onClick={() => changeVisualization("kanban")}
+              sx={{ textTransform: "none", fontWeight: 600 }}
+            >
+              Visualização em Kanban
             </Button>
           </Box>
         </Box>
@@ -194,12 +222,16 @@ export default function HomePage() {
             loadTodos={loadTodos}
             setCreateModalOpen={(value: boolean) => setCreateModalOpen(value)}
           ></TodoTableView>
-        ) : (
+        ) : visualization === "calendar" ? (
           <TodoCalendarView
             todos={todos}
             loadTodos={loadTodos}
             setCreateModalOpen={(value: boolean) => setCreateModalOpen(value)}
           />
+        ) : visualization === "kanban" ? (
+          <TodoKanbanView todos={todos} loadTodos={loadTodos} />
+        ) : (
+          <></>
         )}
       </Container>
 

@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import { setCookie, getCookie, deleteCookie } from "cookies-next";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://localhost:8081";
@@ -19,7 +20,8 @@ class ApiClient {
 
   private getAuthToken(): string | null {
     if (typeof window === "undefined") return null;
-    return localStorage.getItem("authToken");
+    const token = getCookie("authToken");
+    return typeof token === "string" ? token : null;
   }
 
   private setupInterceptors(): void {
@@ -52,8 +54,8 @@ class ApiClient {
   private handleUnauthorized(): void {
     if (typeof window === "undefined") return;
 
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("user");
+    deleteCookie("authToken");
+    deleteCookie("user");
 
     window.location.href = "/auth/login";
   }

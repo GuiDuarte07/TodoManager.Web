@@ -1,5 +1,6 @@
 import { apiClient } from "@/lib/api-client";
 import type { RegisterDto, LoginDto, AuthResponse } from "@/types/auth";
+import { deleteCookie, getCookie, setCookie } from "cookies-next";
 
 export class AuthService {
   static async register(data: RegisterDto): Promise<{ message: string }> {
@@ -13,14 +14,26 @@ export class AuthService {
     );
 
     if (response.token) {
-      localStorage.setItem("authToken", response.token);
-      localStorage.setItem(
+      setCookie("authToken", response.token, {
+        maxAge: 7 * 24 * 60 * 60,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+      });
+
+      setCookie(
         "user",
         JSON.stringify({
           userId: response.userId,
           email: response.email,
           name: response.name,
-        })
+        }),
+        {
+          maxAge: 7 * 24 * 60 * 60,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          path: "/",
+        }
       );
     }
 
@@ -28,19 +41,18 @@ export class AuthService {
   }
 
   static logout(): void {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("user");
+    deleteCookie("authToken");
+    deleteCookie("user");
   }
 
   static getToken(): string | null {
     if (typeof window === "undefined") return null;
-    return localStorage.getItem("authToken");
+    return (getCookie("authToken") as string | undefined) ?? null;
   }
 
-  static getUser() {
+  static getUser(): string | null {
     if (typeof window === "undefined") return null;
-    const userStr = localStorage.getItem("user");
-    return userStr ? JSON.parse(userStr) : null;
+    return (getCookie("user") as string | undefined) ?? null;
   }
 
   static isAuthenticated(): boolean {
