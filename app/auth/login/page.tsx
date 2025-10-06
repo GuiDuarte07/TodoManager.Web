@@ -14,8 +14,10 @@ import {
   Alert,
   CircularProgress,
   Container,
+  InputAdornment,
+  IconButton,
 } from "@mui/material"
-import { LoginRounded, TaskAltRounded } from "@mui/icons-material"
+import { LoginRounded, TaskAltRounded, Visibility, VisibilityOff } from "@mui/icons-material"
 import { AuthService } from "@/services/auth.service"
 import { useAuthStore } from "@/store/auth.store"
 import type { LoginDto } from "@/types/auth"
@@ -26,6 +28,7 @@ export default function LoginPage() {
   const setUser = useAuthStore((state) => state.setUser)
   const [error, setError] = useState<string>("")
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -128,7 +131,7 @@ export default function LoginPage() {
               <TextField
                 fullWidth
                 label="Senha"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 margin="normal"
                 {...register("password", {
                   required: "Senha é obrigatória",
@@ -140,6 +143,21 @@ export default function LoginPage() {
                 error={!!errors.password}
                 helperText={errors.password?.message}
                 disabled={isLoading}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword(!showPassword)}
+                        onMouseDown={(e) => e.preventDefault()}
+                        edge="end"
+                        disabled={isLoading}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
 
               <Button

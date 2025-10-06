@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import {
   Box,
   Card,
@@ -14,45 +14,52 @@ import {
   Alert,
   CircularProgress,
   Container,
-} from "@mui/material"
-import { PersonAddRounded, TaskAltRounded } from "@mui/icons-material"
-import { AuthService } from "@/services/auth.service"
-import type { RegisterDto } from "@/types/auth"
-import { AxiosError } from "axios"
+} from "@mui/material";
+import { PersonAddRounded, TaskAltRounded } from "@mui/icons-material";
+import { AuthService } from "@/services/auth.service";
+import type { RegisterDto } from "@/types/auth";
+import { AxiosError } from "axios";
 
 export default function RegisterPage() {
-  const router = useRouter()
-  const [error, setError] = useState<string>("")
-  const [success, setSuccess] = useState<string>("")
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<RegisterDto & { confirmPassword: string }>()
+  } = useForm<RegisterDto & { confirmPassword: string }>({
+    mode: 'onChange',
+    reValidateMode: 'onChange'
+  });
 
-  const password = watch("password")
+  const password = watch("password");
 
   const onSubmit = async (data: RegisterDto & { confirmPassword: string }) => {
-    setIsLoading(true)
-    setError("")
-    setSuccess("")
+    setIsLoading(true);
+    setError("");
+    setSuccess("");
 
     try {
-      const { confirmPassword, ...registerData } = data
-      await AuthService.register(registerData)
-      setSuccess("Conta criada com sucesso! Redirecionando...")
+      const { confirmPassword, ...registerData } = data;
+      await AuthService.register(registerData);
+      setSuccess("Conta criada com sucesso! Redirecionando...");
       setTimeout(() => {
-        router.push("/auth/login")
-      }, 2000)
+        router.push("/auth/login");
+      }, 2000);
     } catch (err) {
-      setError(err instanceof AxiosError ? err.response?.data.error : "Erro ao criar conta")
+      setError(
+        err instanceof AxiosError
+          ? err.response?.data.error
+          : "Erro ao criar conta"
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Box
@@ -82,10 +89,17 @@ export default function RegisterPage() {
           >
             <TaskAltRounded sx={{ fontSize: 40, color: "white" }} />
           </Box>
-          <Typography variant="h4" component="h1" sx={{ color: "white", fontWeight: 700, mb: 1 }}>
+          <Typography
+            variant="h4"
+            component="h1"
+            sx={{ color: "white", fontWeight: 700, mb: 1 }}
+          >
             Todo Manager
           </Typography>
-          <Typography variant="body1" sx={{ color: "rgba(255, 255, 255, 0.9)" }}>
+          <Typography
+            variant="body1"
+            sx={{ color: "rgba(255, 255, 255, 0.9)" }}
+          >
             Gerencie suas tarefas de forma profissional
           </Typography>
         </Box>
@@ -97,7 +111,11 @@ export default function RegisterPage() {
           }}
         >
           <CardContent sx={{ p: 4 }}>
-            <Typography variant="h5" component="h2" sx={{ mb: 3, fontWeight: 600, textAlign: "center" }}>
+            <Typography
+              variant="h5"
+              component="h2"
+              sx={{ mb: 3, fontWeight: 600, textAlign: "center" }}
+            >
               Criar nova conta
             </Typography>
 
@@ -158,6 +176,14 @@ export default function RegisterPage() {
                     value: 6,
                     message: "Senha deve ter no mínimo 6 caracteres",
                   },
+                  validate: {
+                    hasUpperCase: (value) =>
+                      /[A-Z]/.test(value) ||
+                      "Senha deve conter pelo menos uma letra maiúscula",
+                    hasNumber: (value) =>
+                      /[0-9]/.test(value) ||
+                      "Senha deve conter pelo menos um número",
+                  },
                 })}
                 error={!!errors.password}
                 helperText={errors.password?.message}
@@ -171,7 +197,8 @@ export default function RegisterPage() {
                 margin="normal"
                 {...register("confirmPassword", {
                   required: "Confirmação de senha é obrigatória",
-                  validate: (value) => value === password || "As senhas não coincidem",
+                  validate: (value) =>
+                    value === password || "As senhas não coincidem",
                 })}
                 error={!!errors.confirmPassword}
                 helperText={errors.confirmPassword?.message}
@@ -184,7 +211,13 @@ export default function RegisterPage() {
                 variant="contained"
                 size="large"
                 disabled={isLoading}
-                startIcon={isLoading ? <CircularProgress size={20} /> : <PersonAddRounded />}
+                startIcon={
+                  isLoading ? (
+                    <CircularProgress size={20} />
+                  ) : (
+                    <PersonAddRounded />
+                  )
+                }
                 sx={{
                   mt: 3,
                   mb: 2,
@@ -217,5 +250,5 @@ export default function RegisterPage() {
         </Card>
       </Container>
     </Box>
-  )
+  );
 }
