@@ -124,7 +124,7 @@ export function TodoCard({ todo, onUpdate }: TodoCardProps) {
       case TodoItemStatus.InProgress:
         return {
           label: "Em Progresso",
-          color: "primary" as const,
+          color: "secondary" as const,
           icon: <AccessTimeRounded fontSize="small" />,
         };
       case TodoItemStatus.Completed:

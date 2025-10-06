@@ -145,6 +145,7 @@ export default function HomePage() {
           <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 4 }}>
             <Button
               variant="contained"
+              color="secondary"
               size="small"
               disabled={visualization === 'table'}
               startIcon={<List />}
@@ -156,6 +157,7 @@ export default function HomePage() {
 
             <Button
               variant="contained"
+              color="secondary"
               size="small"
               disabled={visualization === 'calendar'}
               startIcon={<CalendarMonth />}
@@ -167,6 +169,7 @@ export default function HomePage() {
 
             <Button
               variant="contained"
+              color="secondary"
               size="small"
               disabled={visualization === 'kanban'}
               startIcon={<ViewKanban />}
@@ -187,7 +190,7 @@ export default function HomePage() {
               label={`Em Progresso: ${getStatusCount(
                 TodoItemStatus.InProgress
               )}`}
-              color="primary"
+              color="secondary"
               variant="outlined"
             />
             <Chip
