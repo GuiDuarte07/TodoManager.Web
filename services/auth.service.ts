@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import type { RegisterDto, LoginDto, AuthResponse } from "@/types/auth";
+import type { RegisterDto, LoginDto, AuthResponse, User } from "@/types/auth";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 
 export class AuthService {
@@ -50,9 +50,17 @@ export class AuthService {
     return (getCookie("authToken") as string | undefined) ?? null;
   }
 
-  static getUser(): string | null {
+  static getUser(): User | null {
     if (typeof window === "undefined") return null;
-    return (getCookie("user") as string | undefined) ?? null;
+
+    const cookie = getCookie("user");
+    if (!cookie) return null;
+
+    try {
+      return JSON.parse(cookie as string) as User;
+    } catch {
+      return null;
+    }
   }
 
   static isAuthenticated(): boolean {
