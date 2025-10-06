@@ -12,7 +12,7 @@ export class TodoService {
     pageSize = 10,
     status?: number
   ): Promise<PagedListDto<TodoItemDto>> {
-    let endpoint = `/api/todo?page=${page}&pageSize=${pageSize}`;
+    let endpoint = `/api/todo?pageNumber=${page}&pageSize=${pageSize}`;
     if (status !== undefined) {
       endpoint += `&status=${status}`;
     }

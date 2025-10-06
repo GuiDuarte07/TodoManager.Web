@@ -70,7 +70,6 @@ export default function HomePage() {
         pageSize,
         statusFilter
       );
-      console.log(response.items);
       setTodos(response.items);
       setPagination(response.totalPages, response.totalCount);
     } catch (err) {
@@ -82,7 +81,8 @@ export default function HomePage() {
 
   useEffect(() => {
     loadTodos();
-  }, [currentPage, filterStatus]);
+  }, [currentPage, filterStatus, visualization]);
+
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
