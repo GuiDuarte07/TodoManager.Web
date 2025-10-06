@@ -66,11 +66,11 @@ export function AppHeader() {
               horizontal: "right",
             }}
           >
-            <MenuItem onClick={handleMenuClose}>
+            <MenuItem onClick={handleMenuClose} disabled={true}>
               <AccountCircleRounded sx={{ mr: 1 }} />
               Perfil
             </MenuItem>
-            <MenuItem onClick={handleMenuClose}>
+            <MenuItem onClick={handleMenuClose} disabled={true}>
               <SettingsRounded sx={{ mr: 1 }} />
               Configurações
             </MenuItem>
