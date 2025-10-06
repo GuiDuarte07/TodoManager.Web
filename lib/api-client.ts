@@ -1,8 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { setCookie, getCookie, deleteCookie } from "cookies-next";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://localhost:8081";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 class ApiClient {
   private client: AxiosInstance;

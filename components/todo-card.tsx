@@ -290,7 +290,7 @@ export function TodoCard({ todo, onUpdate }: TodoCardProps) {
         <DialogTitle>Excluir tarefa</DialogTitle>
         <DialogContent>
           <Typography>
-            Tem certeza que deseja excluir a tarefa "{todo.title}"?
+            Tem certeza que deseja excluir a tarefa &quot;{todo.title}&quot;?
           </Typography>
         </DialogContent>
         <DialogActions>
