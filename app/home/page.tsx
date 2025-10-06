@@ -98,7 +98,7 @@ export default function HomePage() {
       <AppHeader />
 
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Box sx={{ mb: 4 }}>
+        <Box>
           <Box
             sx={{
               display: "flex",
@@ -142,27 +142,7 @@ export default function HomePage() {
             </Box>
           </Box>
 
-          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 2 }}>
-            <Chip
-              label={`Pendentes: ${getStatusCount(TodoItemStatus.Pending)}`}
-              color="default"
-              variant="outlined"
-            />
-            <Chip
-              label={`Em Progresso: ${getStatusCount(
-                TodoItemStatus.InProgress
-              )}`}
-              color="primary"
-              variant="outlined"
-            />
-            <Chip
-              label={`Concluídas: ${getStatusCount(TodoItemStatus.Completed)}`}
-              color="success"
-              variant="outlined"
-            />
-          </Box>
-
-          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 4 }}>
             <Button
               variant="contained"
               size="small"
@@ -195,6 +175,26 @@ export default function HomePage() {
             >
               Visualização em Kanban
             </Button>
+          </Box>
+
+           <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 2 }}>
+            <Chip
+              label={`Pendentes: ${getStatusCount(TodoItemStatus.Pending)}`}
+              color="default"
+              variant="outlined"
+            />
+            <Chip
+              label={`Em Progresso: ${getStatusCount(
+                TodoItemStatus.InProgress
+              )}`}
+              color="primary"
+              variant="outlined"
+            />
+            <Chip
+              label={`Concluídas: ${getStatusCount(TodoItemStatus.Completed)}`}
+              color="success"
+              variant="outlined"
+            />
           </Box>
         </Box>
 
