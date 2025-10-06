@@ -197,7 +197,15 @@ export function TodoCard({ todo, onUpdate }: TodoCardProps) {
               size="small"
               disabled={isUpdating}
               onClick={handleStatuMenuOpen}
-              sx={{ cursor: "pointer" }}
+              sx={{
+                cursor: "pointer",
+                "&.MuiChip-colorSuccess": {
+                  color: "white",
+                  "& .MuiChip-icon": {
+                    color: "white",
+                  },
+                },
+              }}
             />
 
             <Menu
@@ -223,7 +231,15 @@ export function TodoCard({ todo, onUpdate }: TodoCardProps) {
                         label={config.label}
                         color={config.color}
                         size="small"
-                        sx={{ cursor: "pointer" }}
+                        sx={{
+                          cursor: "pointer",
+                          "&.MuiChip-colorSuccess": {
+                            color: "white",
+                            "& .MuiChip-icon": {
+                              color: "white",
+                            },
+                          },
+                        }}
                       />
                     </MenuItem>
                   );
