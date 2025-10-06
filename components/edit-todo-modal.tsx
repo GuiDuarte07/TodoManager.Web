@@ -22,6 +22,7 @@ import { TodoService } from "@/services/todo.service"
 import { useTodoStore } from "@/store/todo.store"
 import { TodoItemStatus, type UpdateTodoItemDto } from "@/types/todo"
 import { format } from "date-fns"
+import { AxiosError } from "axios"
 
 export function EditTodoModal({ onSuccess }: { onSuccess: () => void }) {
   const { selectedTodo, setSelectedTodo, updateTodo } = useTodoStore()
@@ -68,7 +69,7 @@ export function EditTodoModal({ onSuccess }: { onSuccess: () => void }) {
       handleClose()
       onSuccess()
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao atualizar tarefa")
+      setError(err instanceof AxiosError ? err.response?.data.error : "Erro ao atualizar tarefa")
     } finally {
       setIsLoading(false)
     }

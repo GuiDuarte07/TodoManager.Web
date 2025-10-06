@@ -32,6 +32,7 @@ import { EditTodoModal } from "@/components/edit-todo-modal";
 import { TodoTableView } from "@/components/todo-table-view";
 import { TodoCalendarView } from "@/components/todo-calendar-view";
 import { TodoKanbanView } from "@/components/todo-kanban-view";
+import { AxiosError } from "axios";
 
 export default function HomePage() {
   const { user } = useAuthStore();
@@ -73,7 +74,7 @@ export default function HomePage() {
       setTodos(response.items);
       setPagination(response.totalPages, response.totalCount);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao carregar tarefas");
+      setError(err instanceof AxiosError ? err.response?.data.error : "Erro ao carregar tarefas");
     } finally {
       setIsLoading(false);
     }

@@ -18,6 +18,7 @@ import {
 import { PersonAddRounded, TaskAltRounded } from "@mui/icons-material"
 import { AuthService } from "@/services/auth.service"
 import type { RegisterDto } from "@/types/auth"
+import { AxiosError } from "axios"
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -47,7 +48,7 @@ export default function RegisterPage() {
         router.push("/auth/login")
       }, 2000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao criar conta")
+      setError(err instanceof AxiosError ? err.response?.data.error : "Erro ao criar conta")
     } finally {
       setIsLoading(false)
     }

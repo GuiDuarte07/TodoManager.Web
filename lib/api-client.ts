@@ -42,7 +42,11 @@ class ApiClient {
         return response;
       },
       (error) => {
-        if (error.response?.status === 401) {
+        const url = error.config?.url || "";
+
+        const isAuthEndpoint = url.includes("/auth");
+
+        if (error.response?.status === 401 && !isAuthEndpoint) {
           this.handleUnauthorized();
         }
         return Promise.reject(error);

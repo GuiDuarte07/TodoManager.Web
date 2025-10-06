@@ -19,6 +19,7 @@ import { LoginRounded, TaskAltRounded } from "@mui/icons-material"
 import { AuthService } from "@/services/auth.service"
 import { useAuthStore } from "@/store/auth.store"
 import type { LoginDto } from "@/types/auth"
+import { AxiosError } from "axios"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -46,7 +47,8 @@ export default function LoginPage() {
       })
       router.push("/home")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao fazer login")
+      console.log(err)
+      setError(err instanceof AxiosError ? err.response?.data.error : "Erro ao fazer login.")
     } finally {
       setIsLoading(false)
     }

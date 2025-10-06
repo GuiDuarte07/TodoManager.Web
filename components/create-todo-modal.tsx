@@ -17,6 +17,7 @@ import { AddRounded, TitleRounded, DescriptionRounded, CalendarTodayRounded } fr
 import { TodoService } from "@/services/todo.service"
 import { useTodoStore } from "@/store/todo.store"
 import type { CreateTodoItemDto } from "@/types/todo"
+import { AxiosError } from "axios"
 
 interface CreateTodoModalProps {
   open: boolean
@@ -62,7 +63,7 @@ export function CreateTodoModal({ open, onClose, onSuccess }: CreateTodoModalPro
       handleClose()
       onSuccess()
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao criar tarefa")
+      setError(err instanceof AxiosError ? err.response?.data.error  : "Erro ao criar tarefa")
     } finally {
       setIsLoading(false)
     }
